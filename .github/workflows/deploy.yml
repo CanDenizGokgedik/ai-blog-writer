@@ -10,21 +10,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup SSH connection
+      - name: Set up SSH connection
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.EC2_SSH_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan ec2-13-53-193-165.eu-north-1.compute.amazonaws.com >> ~/.ssh/known_hosts
 
-      - name: Deploy to EC2
+      - name: Deploy to EC2 server
         run: |
           ssh -i ~/.ssh/id_rsa ubuntu@ec2-13-53-193-165.eu-north-1.compute.amazonaws.com << 'EOF'
-            cd ai-blog-writer
+            cd ~/ai-blog-writer
             git pull origin main
             npm install
-            pm2 restart ai-blog || pm2 start index.js --name ai-blog
+            npm run build
+            pm2 describe ai-blog > /dev/null && pm2 restart ai-blog || pm2 start dist/index.js --name ai-blog
+            pm2 save
           EOF
