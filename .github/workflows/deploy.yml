@@ -24,6 +24,6 @@ jobs:
             git pull origin main
             npm install
             npm run build
-            pm2 describe ai-blog > /dev/null && pm2 restart ai-blog || pm2 start "npx serve -s dist" --name ai-blog
+            pm2 describe ai-blog > /dev/null && pm2 restart ai-blog || pm2 start "serve -s dist" --name ai-blog
             pm2 save
           EOF
