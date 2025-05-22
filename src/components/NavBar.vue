@@ -4,7 +4,7 @@
       <div class="navbar-left">
         <router-link to="/" class="brand-logo">
           <i class="fas fa-feather-alt"></i>
-          <span>AI Blog Writer v2</span>
+          <span>AI Blog Writer v3</span>
         </router-link>
         
         <div class="navbar-menu main-links">
